@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Задача {{ task.name }}{% endblock %}
+{% block content %}
+<div class = "container text-start my-3">
+    <a type="button" class="btn btn-primary" href="{% url 'tasks-list' %}">Повернутись до задач</a>
+    <a type="button" class="btn btn-warning" href="{% url 'tasks-update' task.pk %}">Редагувати</a>
+    <a type="button" class="btn btn-danger" href="{% url 'tasks-delete' task.pk %}">Видалити</a>
+</div>
+<div class="card", style="margin-bottom: 20px;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>{{ task.name }}</b></li>
+        <li class="list-group-item">{{ task.description }}</li>
+        <li class="list-group-item">{{ task.status }}</li>
+        <li class="list-group-item">{{ task.priority }}</li>
+        {% if task.due_date %}
+        <li class="list-group-item">{{ task.due_date|date:"d M Y" }}</li>
+        {% endif %}
+        <li class="list-group-item">{{ task.created_at|date:"d M Y" }}</li>
+    </ul>
+</div>
+{% endblock %}
