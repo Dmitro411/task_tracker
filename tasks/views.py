@@ -4,6 +4,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tasks import models
 from tasks import forms
+from tasks.mixins import UserIsOwnerMixin
 
 class TaskListView(ListView):
     model = models.Task
@@ -21,7 +22,7 @@ class TasksCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
-class TasksUpdateView(LoginRequiredMixin, UpdateView):
+class TasksUpdateView(LoginRequiredMixin, UserIsOwnerMixin, UpdateView):
     model = models.Task
     form_class = forms.TaskForm
     template_name = 'tasks/tasks_update.html'
@@ -32,7 +33,7 @@ class TasksDetailView(DeleteView):
     context_object_name = 'task'
     template_name = 'tasks/tasks_detail.html'
 
-class TasksDeleteView(LoginRequiredMixin, DeleteView):
+class TasksDeleteView(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
     model = models.Task
-    context_object_name = 'tasks/tasks_detail.html'
+    template_name = 'tasks/tasks_delete.html'
     success_url = reverse_lazy("tasks-list")
