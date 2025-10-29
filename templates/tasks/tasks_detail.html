@@ -18,4 +18,23 @@
         <li class="list-group-item">{{ task.created_at|date:"d M Y" }}</li>
     </ul>
 </div>
+<div class="container text-start my-3">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Додати комментар<button>
+    </form>
+</div>
+    <h3>Коментарі:</h3>
+    {% for comment in comments %}
+    <div class="container text-start my-3 border border-2 border-dark">
+        <p>{{ comment.content }}</p>
+        {% if comment.media %}
+            <img src="{{ comment.media.url }}" alt="Зображення комментаря" style="max-width:100%">
+        {% endif %}
+        <span class="badge text-bg-primary my-3">Автор: {{ comment.author.last_name }} {{ comment.author.first_name }}</span>
+        <span class="badge text-bg-dark my-3">Створено: {{ comment.created_at|date:"d M Y"}}</span>
+    </div>
+    {% endfor %}
+
 {% endblock %}
