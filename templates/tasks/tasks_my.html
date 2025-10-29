@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Мої задачі {{ task.name }}{% endblock %}
+{% block content %}
+
+<h2>Мої задачі</h2>
+
+{% for task in tasks %}
+<div class="card my-2">
+  <div class="card-body">
+    <h5>{{ task.name }}</h5>
+    <p>{{ task.description }}</p>
+  </div>
+</div>
+{% empty %}
+<p>У вас поки немає задач.</p>
+{% endfor %}
+
+{% endblock %}

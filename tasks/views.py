@@ -13,6 +13,14 @@ class TaskListView(ListView):
     template_name = 'tasks/tasks_list.html'
     ordering = ['-created_at']
 
+class MyTaskListView(ListView):
+    model = models.Task
+    context_object_name = 'tasks'
+    template_name = 'tasks/tasks_my.html'
+
+    def get_queryset(self):
+        return models.Task.objects.filter(user=self.request.user)
+
 class TasksCreateView(LoginRequiredMixin, CreateView):
     model = models.Task
     form_class = forms.TaskForm
