@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load custom_tags %}
 {% block title %}Задача {{ task.name }}{% endblock %}
 {% block content %}
 <div class = "container text-start my-3">
@@ -25,16 +26,21 @@
         <button type="submit" class="btn btn-primary">Додати комментар<button>
     </form>
 </div>
-    <h3>Коментарі:</h3>
-    {% for comment in comments %}
-    <div class="container text-start my-3 border border-2 border-dark">
-        <p>{{ comment.content }}</p>
-        {% if comment.media %}
-            <img src="{{ comment.media.url }}" alt="Зображення комментаря" style="max-width:100%">
+
+<h3>Коментарі:</h3>
+{% for comment in comments %}
+<div class="container text-start my-3 border border-2 border-dark">
+    <p>{{ comment.content }}</p>
+    {% if comment.media %}
+        {% if comment.media.url|endswith:'.jpg' or comment.media.url|endswith:'.png' or comment.media.url|endswith:'.jpeg' or comment.media.url|endswith:'.gif' %}
+        <img src="{{ comment.media.url }}" alt="Зображення коментаря" style="max-width:100%; border-radius: 10px;">
+        {% elif comment.media.url|endswith:'.mp4' or comment.media.url|endswith:'.mov' or comment.media.url|endswith:'.avi' or comment.media.url|endswith:'.mkv' %}
+        <video src="{{ comment.media.url }}" alt="Відео коментаря" style="max-width:100%; border-radius: 10px;" controls></video>
         {% endif %}
-        <span class="badge text-bg-primary my-3">Автор: {{ comment.author.last_name }} {{ comment.author.first_name }}</span>
-        <span class="badge text-bg-dark my-3">Створено: {{ comment.created_at|date:"d M Y"}}</span>
-    </div>
-    {% endfor %}
+    {% endif %}
+    <span class="badge text-bg-primary my-3">Автор: {{ comment.author.last_name }} {{ comment.author.first_name }}</span>
+    <span class="badge text-bg-dark my-3">Створено: {{ comment.created_at|date:"d M Y"}}</span>
+</div>
+{% endfor %}
 
 {% endblock %}

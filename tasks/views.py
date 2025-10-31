@@ -13,6 +13,22 @@ class TaskListView(ListView):
     template_name = 'tasks/tasks_list.html'
     ordering = ['-created_at']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = forms.TasksFIlterForm(self.request.GET)
+        return context
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        status = self.request.GET.get('status')
+        priority = self.request.GET.get('priority')
+        if status and status != "all":
+            queryset = queryset.filter(status=status)
+        if priority and priority != "all":
+            queryset = queryset.filter(priority=priority)
+        print(status)
+        return queryset
+
 class MyTaskListView(ListView):
     model = models.Task
     context_object_name = 'tasks'
