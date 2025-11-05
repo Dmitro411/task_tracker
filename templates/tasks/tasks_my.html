@@ -3,16 +3,27 @@
 {% block content %}
 
 <h2>Мої задачі</h2>
+<br>
 
-{% for task in tasks %}
-<div class="card my-2">
-  <div class="card-body">
-    <h5>{{ task.name }}</h5>
-    <p>{{ task.description }}</p>
+<div class="row mb-2">
+  {% for task in tasks %}
+  <div class="col-md-12">
+    <a class="text-decoration-none" href="{% url 'tasks-detail' task.pk %}">
+      <div class="card text-bg-light mb-3" style="max-width: 39rem;">
+        <div class="card-header"><h5> {{ task.name }} </h5></div>
+        <div class="card-body">
+          <p class="card-text">{{ task.description }}</p>
+          <span class="badge text-bg-success">{{ task.get_status_display }}</span>
+          <span class="badge text-bg-success">{{ task.get_priority_display }}</span>
+          {% if task.due_date %}
+            <p>Дедлайн: {{ task.due_date|date:"d M Y" }}</p>
+          {% endif %}
+            <p>Створено: {{ task.created_at|date:"d M Y" }}</p>
+        </div>
+      </div>
+    </a>
   </div>
+  {% endfor %}
 </div>
-{% empty %}
-<p>У вас поки немає задач.</p>
-{% endfor %}
 
 {% endblock %}

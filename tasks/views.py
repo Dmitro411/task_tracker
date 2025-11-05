@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 
 from tasks import models
 from tasks import forms
@@ -79,4 +79,18 @@ class TasksDeleteView(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
     model = models.Task
     template_name = 'tasks/tasks_delete.html'
     success_url = reverse_lazy("tasks-list")
+
+
+def search_view(request):
+    query = request.GET.get("q", "").strip()
+
+    if not query:
+        return redirect(request.META.get("HTTP_REFERER", "/")) 
+
+    task = models.Task.objects.filter(name__iexact=query).first() 
+
+    if task:
+        return redirect("tasks-detail", pk=task.pk) 
+    else:
+        return redirect(request.META.get("HTTP_REFERER", "/"))
 
